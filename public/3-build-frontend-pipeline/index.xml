@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Build pipeline for front-end on Serverless - CI/CD with AWS CodePipeline</title>
+    <link>/3-build-frontend-pipeline/</link>
+    <description>Recent content in Build pipeline for front-end on Serverless - CI/CD with AWS CodePipeline</description>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="/3-build-frontend-pipeline/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Create SAM pipeline on Serverless - CI/CD with AWS CodePipeline</title>
+    <link>/2-build-sam-pipeline/2-2-create-pipeline/</link>
+    <description>Recent content in Create SAM pipeline on Serverless - CI/CD with AWS CodePipeline</description>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="/2-build-sam-pipeline/2-2-create-pipeline/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

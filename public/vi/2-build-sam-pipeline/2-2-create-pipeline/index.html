@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="vi" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.99.1" />
+    <meta name="description" content="">
+<meta name="author" content="journeyoftheaverageguy@gmail.com">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Tạo SAM pipeline :: Serverless - CI/CD with AWS CodePipeline</title>
+
+    
+    <link href="/css/nucleus.css?1708425185" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1708425185" rel="stylesheet">
+    <link href="/css/hybrid.css?1708425185" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1708425185" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1708425185" rel="stylesheet">
+    <link href="/css/auto-complete.css?1708425185" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1708425185" rel="stylesheet">
+    <link href="/css/theme.css?1708425185" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1708425185" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1708425185" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1708425185"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/vi/2-build-sam-pipeline/2-2-create-pipeline/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1708425185"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1708425185"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/vi";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1708425185"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-preparation/" title="Chuẩn bị" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-preparation/">
+           <b> 1. </b> Chuẩn bị
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-build-sam-pipeline/" title="Xây dựng SAM pipeline" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/vi/2-build-sam-pipeline/">
+           <b> 2. </b> Xây dựng SAM pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-build-sam-pipeline/2-1-create-git-repo/" title="Tạo Git repository" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-build-sam-pipeline/2-1-create-git-repo/">
+           <b> 2.1. </b> Tạo Git repository
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-build-sam-pipeline/2-2-create-pipeline/" title="Tạo SAM pipeline" class="dd-item 
+        parent
+        active
+        
+        ">
+      <a href="/vi/2-build-sam-pipeline/2-2-create-pipeline/">
+           <b> 2.2. </b> Tạo SAM pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-build-frontend-pipeline/" title="Xây dựng pipeline cho frontend " class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-build-frontend-pipeline/">
+           <b> 3. </b> Xây dựng pipeline cho frontend 
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-build-frontend-pipeline/3-1-create-git-repo/" title="Tạo Git repository " class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-build-frontend-pipeline/3-1-create-git-repo/">
+           <b> 3.1 </b> Tạo Git repository 
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-build-frontend-pipeline/3-2-create-codepipeline/" title="Tạo pipeline " class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-build-frontend-pipeline/3-2-create-codepipeline/">
+           <b> 3.2 </b> Tạo pipeline 
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-test-operation/" title="Kiểm tra hoạt động" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-test-operation/">
+           <b> 4. </b> Kiểm tra hoạt động
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-cleanup/" title="Dọn dẹp tài nguyên" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-cleanup/">
+           <b> 5. </b> Dọn dẹp tài nguyên
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="/2-build-sam-pipeline/2-2-create-pipeline/">English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="/vi/2-build-sam-pipeline/2-2-create-pipeline/" selected>Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+    
+     <b> Workshop</b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=8147683&style=0038&nbdigits=9&type=page&initCount=0" title="Migrate" Alt="web counter"   border="0" /></a>  <br>
+     <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Total CLoud Journey" Alt="web counter"   border="0"   />
+     
+</left>
+<left>
+    <br>
+    <br>
+        <b> Last Updated </b> <br>
+        <i><font color=orange>20-02-2024</font></i>
+    </left>
+    <left>
+        <br>
+        <br>
+            <b> Team </b> <br>
+           
+            <i> <a href="https://www.linkedin.com/in/jotaguy"  style="color:orange">Gia Hưng </a> <br>
+                <a href="https://www.linkedin.com/in/hạnh-phạm-725b7322a/"  style="color:orange">Hạnh Phạm </a> <br>
+               
+        </i>
+        </left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/vi/'>Serverless - CI/CD với CodePipeline</a> > <a href='/vi/2-build-sam-pipeline/'>Xây dựng SAM pipeline</a> > Tạo SAM pipeline
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Tạo SAM pipeline
+            </h1>
+          
+
+        
+
+
+
+	<p>Tạo SAM Pipeline với nhà cung cấp là CodePipeline sẽ có 3 bước riêng biệt sau:</p>
+<ol>
+<li>Tạo cơ sở hạ tầng và IAM roles cần thiết</li>
+<li>Tạo mẫu CloudFormation pipeline</li>
+<li>Triển khai mẫu CloudFormation pipeline
+SAM Pipeline sẽ tự động hoá tất cả các bước trên.</li>
+</ol>
+<h4 id="tạo-cơ-sở-hạ-tầng-và-iam-roles-cần-thiết">Tạo cơ sở hạ tầng và IAM roles cần thiết</h4>
+<ol>
+<li>Chạy câu lệnh sau:</li>
+</ol>
+<pre tabindex="0"><code>sam pipeline init --bootstrap
+</code></pre><ol start="2">
+<li>Trả lời các câu hỏi với theo danh sách dưới đây:</li>
+</ol>
+<ul>
+<li>Select a pipeline template to get started: AWS Quick Start Pipeline Templates (1)</li>
+<li>Select CI/CD system: AWS CodePipeline (5)</li>
+<li>Do you want to go through stage setup process now? [y/N]: y</li>
+<li>[1] Stage definition. Stage configuration name: dev</li>
+<li>[2] Account details. Select a credential source to associate with this stage: default (named profile) (2)</li>
+<li>Enter the region in which you want these resources to be created: Your region of choice</li>
+<li>Enter the pipeline IAM user ARN if you have previously … [] return/enter</li>
+<li>Enter the pipeline execution role ARN if you have previously … []: return/enter</li>
+<li>Enter the CloudFormation execution role ARN if you have previously … []: return/enter</li>
+<li>Please enter the artifact bucket ARN for your Lambda function. If you do not … []: return/enter</li>
+<li>Does your application contain any IMAGE type Lambda functions? [y/N]: N</li>
+<li>Press enter to confirm the values above … : return/enter</li>
+<li>Should we proceed with the creation? [y/N]: y</li>
+</ul>
+<pre tabindex="0"><code>sam pipeline init generates a pipeline configuration file that your CI/CD system
+can use to deploy serverless applications using AWS SAM.
+We will guide you through the process to bootstrap resources for each stage,
+then walk through the details necessary for creating the pipeline config file.
+
+Please ensure you are in the root folder of your SAM application before you begin.
+
+Select a pipeline template to get started:
+        1 - AWS Quick Start Pipeline Templates
+        2 - Custom Pipeline Template Location
+Choice: 1
+
+Cloning from https://github.com/aws/aws-sam-cli-pipeline-init-templates.git (process may take a moment)
+Select CI/CD system
+        1 - Jenkins
+        2 - GitLab CI/CD
+        3 - GitHub Actions
+        4 - Bitbucket Pipelines
+        5 - AWS CodePipeline
+Choice: 5
+You are using the 2-stage pipeline template.
+ _________    _________ 
+|         |  |         |
+| Stage 1 |-&gt;| Stage 2 |
+|_________|  |_________|
+
+Checking for existing stages...
+
+[!] None detected in this account.
+
+Do you want to go through stage setup process now? If you choose no, you can still reference other bootstrapped resources. [y/N]: y
+
+For each stage, we will ask for [1] stage definition, [2] account details, and [3]
+reference application build resources in order to bootstrap these pipeline
+resources.
+
+We recommend using an individual AWS account profiles for each stage in your
+pipeline. You can set these profiles up using aws configure or ~/.aws/credentials. See
+[https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html].
+
+
+Stage 1 Setup
+
+[1] Stage definition
+Enter a configuration name for this stage. This will be referenced later when you use the sam pipeline init command:
+Stage configuration name: dev
+
+[2] Account details
+The following AWS credential sources are available to use.
+To know more about configuration AWS credentials, visit the link below:
+https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html                
+        1 - Environment variables (not available)
+        2 - default (named profile)
+        3 - produser (named profile)
+        q - Quit and configure AWS credentials
+Select a credential source to associate with this stage: 2
+Associated account 885078239936 with configuration dev.
+
+Enter the region in which you want these resources to be created [ap-southeast-1]: ap-southeast-1
+Enter the pipeline IAM user ARN if you have previously created one, or we will create one for you []: 
+
+[3] Reference application build resources
+Enter the pipeline execution role ARN if you have previously created one, or we will create one for you []: 
+Enter the CloudFormation execution role ARN if you have previously created one, or we will create one for you []: 
+Please enter the artifact bucket ARN for your Lambda function. If you do not have a bucket, we will create one for you []: 
+Does your application contain any IMAGE type Lambda functions? [y/N]: n
+
+[4] Summary
+Below is the summary of the answers:
+        1 - Account: 885078239936
+        2 - Stage configuration name: dev
+        3 - Region: ap-southeast-1
+        4 - Pipeline user: [to be created]
+        5 - Pipeline execution role: [to be created]
+        6 - CloudFormation execution role: [to be created]
+        7 - Artifacts bucket: [to be created]
+        8 - ECR image repository: [skipped]
+Press enter to confirm the values above, or select an item to edit the value: 
+
+This will create the following required resources for the &#39;dev&#39; configuration: 
+        - Pipeline IAM user
+        - Pipeline execution role
+        - CloudFormation execution role
+        - Artifact bucket
+Should we proceed with the creation? [y/N]: y
+        Creating the required resources...
+
+Checking for existing stages...
+</code></pre><p>Sau khi hoàn tất, bạn sẽ thấy đầu ra giống như sau:</p>
+<pre tabindex="0"><code>Successfully created!
+The following resources were created in your account:
+        - Pipeline IAM user
+        - Pipeline execution role
+        - CloudFormation execution role
+        - Artifact bucket
+Pipeline IAM user credential:
+        AWS_ACCESS_KEY_ID: AAAAAAAAAAAAIFRDVPDX
+        AWS_SECRET_ACCESS_KEY: xxxxxxxxxxxxxxxxxxxxxxkMYI9RatNgVcIybUwh
+</code></pre><ol start="3">
+<li>Mở bảng điểu khiển của <a href="https://ap-southeast-1.console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/">CloudFormation</a></li>
+</ol>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-1.png?featherlight=false&amp;width=90pc" alt="CreatePipeline"></p>
+<ol start="4">
+<li>Ấn <strong>Stacks</strong> ở menu phía bên trái để kiểm tra xem stack đã được tạo chưa.</li>
+</ol>
+<ul>
+<li>Ấn vào stack đang hiển thị</li>
+</ul>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-2.png?featherlight=false&amp;width=90pc" alt="CreatePipeline"></p>
+<ol start="5">
+<li>Ấn sang tab <strong>Resources</strong>, các tài nguyên đã được khởi tạo</li>
+</ol>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-3.png?featherlight=false&amp;width=90pc" alt="CreatePipeline"></p>
+<ol start="6">
+<li>Quay lại với màn hình tạo SAM pipeline</li>
+</ol>
+<ul>
+<li>Nhập &ldquo;N&rdquo; để không tạo stage thứ 2.</li>
+</ul>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-4.png?featherlight=false&amp;width=90pc" alt="CreatePipeline"></p>
+<h4 id="tạo-mẫu-cloudformation-pipeline">Tạo mẫu CloudFormation pipeline</h4>
+<p>Chúng ta tiếp tục tạo mẫu CloudFormation xác định toàn bộ CI/CD pipeline</p>
+<ol>
+<li>Nhập các câu trả lời theo dánh sách dưới đây</li>
+</ol>
+<ul>
+<li>What is the Git provider? Choice []: CodeCommit (2)</li>
+<li>What is the CodeCommit repository name?: fcj-book-store-backend</li>
+<li>What is the Git branch used for production deployments? [main]: main</li>
+<li>What is the template file path? [template.yaml]: template.yaml</li>
+<li>Select an index or enter the stage 1’s configuration name (as provided during the bootstrapping): 1</li>
+<li>What is the sam application stack name for stage 1? [sam-app]: fcj-book-store-backend-dev</li>
+<li>Select an index or enter the stage 2’s configuration name (as provided during the bootstrapping): 1</li>
+<li>What is the sam application stack name for stage 2? [sam-app]: fcj-book-store-backend-dev</li>
+</ul>
+<pre tabindex="0"><code>What is the Git provider?
+        1 - Bitbucket
+        2 - CodeCommit
+        3 - GitHub
+        4 - GitHubEnterpriseServer
+Choice []: 2
+What is the CodeCommit repository name?: fcj-book-store-backend
+What is the Git branch used for production deployments? [main]: main
+What is the template file path? [template.yaml]: template.yaml
+We use the stage configuration name to automatically retrieve the bootstrapped resources created when you ran `sam pipeline bootstrap`.
+
+Here are the stage configuration names detected in .aws-sam/pipeline/pipelineconfig.toml:
+        1 - dev
+        2 - prod
+Select an index or enter the stage 1&#39;s configuration name (as provided during the bootstrapping): 1
+What is the sam application stack name for stage 1? [sam-app]: fcj-book-store-backend-dev
+Stage 1 configured successfully, configuring stage 2.
+
+Here are the stage configuration names detected in .aws-sam/pipeline/pipelineconfig.toml:
+        1 - dev
+        2 - prod
+Select an index or enter the stage 2&#39;s configuration name (as provided during the bootstrapping): 1
+What is the sam application stack name for stage 2? [sam-app]: fcj-book-store-backend-dev
+Stage 2 configured successfully.
+To deploy this template and connect to the main git branch, run this against the leading account:
+`sam deploy -t codepipeline.yaml --stack-name &lt;stack-name&gt; --capabilities=CAPABILITY_IAM`.
+SUMMARY
+We will generate a pipeline config file based on the following information:
+        What is the Git provider?: CodeCommit
+        What is the CodeCommit repository name?: fcj-book-store-backend
+        …………………
+        What is the ECR repository URI for stage 2?: 
+        What is the AWS region for stage 2?: ap-southeast-1
+Successfully created the pipeline configuration file(s):
+        - codepipeline.yaml
+        - assume-role.sh
+        - pipeline/buildspec_unit_test.yml
+        - pipeline/buildspec_build_package.yml
+        - pipeline/buildspec_integration_test.yml
+        - pipeline/buildspec_feature.yml
+        - pipeline/buildspec_deploy.yml
+</code></pre><ol start="2">
+<li>Sau khi hoàn thành, SAM project có cấu trúc như sau</li>
+</ol>
+<pre tabindex="0"><code>└── fcj-book-store-sam-ws7
+    ├── codepipeline.yaml       # (new) CodePipeline CloudFormation template
+    ├── assume-role.sh          # (new) Helper script for CodePipeline
+    ├── pipeline/               # (new) Build Specs for CodeBuild
+    ├── events
+    ├── fcj-book-store/         # SAM application root
+    ├── README.md
+    └── template.yaml           # SAM template
+</code></pre><h4 id="triển-khai-mẫu-cloudformation-pipeline">Triển khai mẫu CloudFormation pipeline</h4>
+<ol>
+<li>Chạy các câu lệnh sau để tải những thư mục và tệp mới được tạo lên CodeCommit repository</li>
+</ol>
+<pre tabindex="0"><code>git add .
+git commit -m &#34;Adding SAM CI/CD Pipeline definition&#34;
+git push
+</code></pre><ol start="2">
+<li>Sau đó, triển khai SAM Pipelines bằng câu lệnh sau:</li>
+</ol>
+<pre tabindex="0"><code>sam deploy -t codepipeline.yaml --stack-name fcj-book-store-backend-pipeline --capabilities=CAPABILITY_IAM
+</code></pre><ol start="3">
+<li>Đợi một lúc, trở lại với bảng điều khiển của CloudFormation để kiểm tra</li>
+</ol>
+<ul>
+<li>Tải lại danh sách stack</li>
+<li>Ấn chọn <strong>fcj-book-store-backend</strong></li>
+</ul>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-5.png?featherlight=false&amp;width=90pc" alt="DeployPipeline"></p>
+<ol start="4">
+<li>Mở bảng điều khiển của <a href="https://ap-southeast-1.console.aws.amazon.com/codesuite/codepipeline/start?region=ap-southeast-1">CodePipeline</a></li>
+</ol>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-6.png?featherlight=false&amp;width=90pc" alt="DeployPipeline"></p>
+<ol start="5">
+<li>Một pipeline đang được xử lý</li>
+</ol>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-7.png?featherlight=false&amp;width=90pc" alt="DeployPipeline"></p>
+<ol start="6">
+<li>Đợi một lúc để xử lý pipeline hoàn thành</li>
+</ol>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-8.png?featherlight=false&amp;width=90pc" alt="DeployPipeline"></p>
+<ol start="7">
+<li>Trở lại bảng điều khiển của CloudFormation, tải lại danh sách các stacks</li>
+</ol>
+<ul>
+<li>Ấn chọn <strong>fcj-book-store-backend-dev</strong></li>
+<li>Ấn tab <strong>Outputs</strong></li>
+<li>Ghi lại URL của API để dùng cho bước sau</li>
+</ul>
+<p><img src="/images/2-build-sam-pipeline/2-2-create-pipeline-9.png?featherlight=false&amp;width=90pc" alt="DeployPipeline"></p>
+<p>Vậy là chúng ta đã triển khai thành công SAM Pipeline. Bước tiếp theo chúng ta sẽ triển khi pipeline cho phần front-end của ứng dụng web.</p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/vi/2-build-sam-pipeline/2-1-create-git-repo/" title="Tạo Git repository"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/vi/3-build-frontend-pipeline/" title="Xây dựng pipeline cho frontend " style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1708425185"></script>
+    <script src="/js/perfect-scrollbar.min.js?1708425185"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1708425185"></script>
+    <script src="/js/jquery.sticky.js?1708425185"></script>
+    <script src="/js/featherlight.min.js?1708425185"></script>
+    <script src="/js/highlight.pack.js?1708425185"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1708425185"></script>
+    <script src="/js/learn.js?1708425185"></script>
+    <script src="/js/hugo-learn.js?1708425185"></script>
+
+    <link href="/mermaid/mermaid.css?1708425185" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1708425185"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
