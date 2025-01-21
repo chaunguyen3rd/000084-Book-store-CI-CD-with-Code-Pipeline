@@ -5,56 +5,40 @@ weight : 1
 chapter : false
 pre : " <b> 2.1. </b> "
 ---
-1. Run the following command to create a new CodeCommit repository
-```
-aws codecommit create-repository --repository-name fcj-book-store-backend
-```
-You should see output similar to the following:
-```
-{
-    "repositoryMetadata": {
-        "accountId": "111111111111",
-        "repositoryId": "b782c34e-77dc-4627-8aea-ae8bd5ea46c3",
-        "repositoryName": "fcj-book-store-backend",
-        "lastModifiedDate": "2022-09-19T11:49:51.325000+07:00",
-        "creationDate": "2022-09-19T11:49:51.325000+07:00",
-        "cloneUrlHttp": "https://git-codecommit.ap-southeast-1.amazonaws.com/v1/repos/fcj-book-store-backend",
-        "cloneUrlSsh": "ssh://git-codecommit.ap-southeast-1.amazonaws.com/v1/repos/fcj-book-store-backend",
-        "Arn": "arn:aws:codecommit:ap-southeast-1:111111111111:fcj-book-store-backend"
-    }
-}
-```
 
-- Open [AWS CodeCommit console](https://ap-southeast-1.console.aws.amazon.com/codesuite/codecommit/repositories?region=ap-southeast-1) to check repository
+1. Open your Gitlab dashboard.
+    - Click **Projects** on the left menu.
+    - Choose **Create a project** option.
+      ![GitRepoCreation](/images/temp/1/6.png?width=90pc)
+    - At **Create new project** page, choose **Create blank project** option.
+      ![GitRepoCreation](/images/temp/1/7.png?width=90pc)
+    - At **Create blank project** page.
+      - Enter **fcj-book-store-backend** at **Project name**.
+      - Uncheck **Initialize repository with a README**.
+      - Click **Create project** button.
+        ![GitRepoCreation](/images/temp/1/8.png?width=90pc)
 
-![CreateRepository](/images/2-build-sam-pipeline/2-1-create-git-repo-1.png?featherlight=false&width=90pc)
-
-2. Run the below commands at the sam project folder you downloaded - **fcj-book-store-sam-ws7** to initialize a local Git repository, add code and push to CodeCommit repository.
-```
-git init -b main
-echo -e "\n\n.aws-sam" >> .gitignore
-git add .
-git commit -m "Initial commit"
-```
-
-![PushCode](/images/2-build-sam-pipeline/2-1-create-git-repo-2.png?featherlight=false&width=90pc)
-
-3. Add your CodeCommit repository URL as a remote on your local git project.
-```
-git remote add origin codecommit://fcj-book-store-backend
-```
-{{% notice tip %}}
-If origin already exists or url is wrong, can remove it by running: `git remote rm origin`
+2. Configure SSH keys to communicate with Gitlab.
+    - Follow the documents in **Notes** to finish this step.
+{{% notice note %}}
+[Generate an SSH key pair](https://docs.gitlab.com/ee/user/ssh.html#generate-an-ssh-key-pair).\
+[Configure SSH to point to a different directory](https://docs.gitlab.com/ee/user/ssh.html#configure-ssh-to-point-to-a-different-directory).\
+Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.com/ee/user/ssh.html).
 {{% /notice %}}
 
-4. Push code to CodeCommit repository by running the following command: 
-```
-git push -u origin main
-```
+3. Upload the source code to **fcj-book-store-backend** Gitlab project.
+    - Go to the root directory of **fcj-book-store-sam-ws7** project that you downloaded before.
+    - Run the code below.
 
-![PushCode](/images/2-build-sam-pipeline/2-1-create-git-repo-3.png?featherlight=false&width=90pc)
+      ```bash
+      git init
+      git remote add origin git@gitlab.com:fcj-ws/fcj-book-store-backend.git
+      git add .
+      git commit -m "Init project"
+      git push --set-upstream origin master
+      ```
 
-5. Back to CodeCommit console
-- Click **fcj-book-store-backend** repository, you will see the code has been uploaded
+      ![GitRepoCreation](/images/temp/1/9.png?width=90pc)
 
-![PushCode](/images/2-build-sam-pipeline/2-1-create-git-repo-4.png?featherlight=false&width=90pc)
+4. Back to **fcj-book-store-backend** Gitlab project. You could see the code has been uploaded.
+    ![GitRepoCreation](/images/temp/1/10.png?width=90pc)
