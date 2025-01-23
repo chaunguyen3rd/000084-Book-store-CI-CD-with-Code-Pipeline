@@ -6,6 +6,10 @@ chapter : false
 pre : " <b> 2.2. </b> "
 ---
 
+#### Preparation
+
+In this step, we will create IAM roles for **CodePipeline** Deploy stage and **CodeBuild** 
+
 1. Open [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
     - Click **Pipeline** on the left menu.
     - Click **Create pipeline** button.
