@@ -5,92 +5,44 @@ weight : 1
 chapter : false
 pre : " <b> 3.1 </b> "
 ---
-1. Update source code of front-end
-- Open **config.js** file in source code folder of front-end you downloaded - fcj-serverless-frontend. Next, replace value of **APP_API_URL** with URL that you recorded from the previous step
-- Uncomment line 4 and replace value with an email that will register account 
 
-![DeployPipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-9.png?featherlight=false&width=90pc)
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-1.png?featherlight=false&width=90pc)
+1. Open your **Gitlab** dashboard.
+    - Click the **Projects** on the left menu.
+    - Click the **New project** button.
+      ![GitRepoCreation](/images/temp/1/40.png?width=90pc)
+    - At **Create new project** page, choose **Create blank project** option.
+      ![GitRepoCreation](/images/temp/1/7.png?width=90pc)
+    - At **Create blank project** page.
+      - Enter ``fcj-book-store-frontend`` at **Project name**.
+      - Uncheck **Initialize repository with a README**.
+      - Click the **Create project** button.
+        ![GitRepoCreation](/images/temp/1/41.png?width=90pc)
 
-- Open **Login.js** file in  **fcj-serverless-frontend/src/component/Authen/** folder, uncomment lines 39 and 41
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-2.png?featherlight=false&width=90pc)
-
-2. Create a new **buildspect.yaml** file in **fcj-serverless-frontend/** folder. Copy the following script into that file
-```
-version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-      nodejs: latest
-
-    commands:
-      # install yarn
-      - npm install yarn
-      # install dependencies
-      - yarn
-      # so that build commands work
-      - yarn add eslint-config-react-app
-
-  build:
-    commands:
-      # run build script
-      - yarn build
-
-artifacts:
-  # include all files required to run application
-  # we include only the static build files
-  files:
-    - '**/*'
-  base-directory: 'build'  
-```
-
-3. Run the following to create CodeCommit repository for front-end code
-```
-aws codecommit create-repository --repository-name fcj-book-store-frontend
-```
-You will see output similar to the following
-```
-{
-    "repositoryMetadata": {
-        "accountId": "111111111111",
-        "repositoryId": "b782c34e-77dc-4627-8aea-ae8bd5ea79a9",
-        "repositoryName": "fcj-book-store-frontend",
-        "lastModifiedDate": "2022-09-19T14:49:51.325000+07:00",
-        "creationDate": "2022-09-19T14:49:51.325000+07:00",
-        "cloneUrlHttp": "https://git-codecommit.ap-southeast-1.amazonaws.com/v1/repos/fcj-book-store-frontend",
-        "cloneUrlSsh": "ssh://git-codecommit.ap-southeast-1.amazonaws.com/v1/repos/fcj-book-store-frontend",
-        "Arn": "arn:aws:codecommit:ap-southeast-1:111111111111:fcj-book-store-frontend"
-    }
-}
-```
-
-- Open [CodeCommit console](https://ap-southeast-1.console.aws.amazon.com/codesuite/codecommit/repositories?region=ap-southeast-1) to check repository
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-3.png?featherlight=false&width=90pc)
-
-4. Run the commands below at the root of the front-end project to initialize a local Git repository, add the code to it.
-```
-git init -b main
-git add .
-git commit -m "Initial commit"
-```
-
-5. Add your CodeCommit repository URL as a remote on your local git project.
-```
-git remote add origin codecommit://fcj-book-store-frontend
-```
-{{% notice tip %}}
-If origin already exists or url is wrong, can remove it by running: `git remote rm origin`
+2. Configure SSH keys to communicate with **Gitlab**.
+    - Follow the documents in **Notes** to finish this step.
+{{% notice note %}}
+[Generate an SSH key pair](https://docs.gitlab.com/ee/user/ssh.html#generate-an-ssh-key-pair).\
+[Configure SSH to point to a different directory](https://docs.gitlab.com/ee/user/ssh.html#configure-ssh-to-point-to-a-different-directory).\
+Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.com/ee/user/ssh.html).
 {{% /notice %}}
 
-6. Push code to CodeCommit repository by running the following command: 
-```
-git push -u origin main
-```
+3. Upload the source code to **fcj-book-store-frontend** Gitlab project.
+    - Go to the root directory of **FCJ-Serverless-Workshop** project that you downloaded before.
+    - Open **src/config.js**, change the value of **APP_API_URL** to the value of **ApiUrl** that you recorded in the [Create SAM pipeline](2-2-create-pipeline) step, in this case is ``https://zr0i1ihy24.execute-api.us-east-1.amazonaws.com/staging
+    ``.
+      ![GitRepoCreation](/images/temp/1/42.png?width=90pc)
+    - Run the code below in your terminal at the root directory of **FCJ-Serverless-Workshop** project.
 
-7. Back to CodeCommit console
-- Click **fcj-book-store-frontend** repository, you will see the code has been uploaded
+      ```bash
+      rm -rf .git
+      git init
+      git remote add origin git@gitlab.com:fcj-ws/fcj-book-store-frontend.git
+      git add .
+      git commit -m "Init project"
+      git push --set-upstream origin master
+      ```
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-4.png?featherlight=false&width=90pc)
+      ![GitRepoCreation](/images/temp/1/43.png?width=90pc)
+
+4. Back to **fcj-book-store-frontend** Gitlab project. You could see the code has been uploaded.
+    ![GitRepoCreation](/images/temp/1/44.png?width=90pc)
