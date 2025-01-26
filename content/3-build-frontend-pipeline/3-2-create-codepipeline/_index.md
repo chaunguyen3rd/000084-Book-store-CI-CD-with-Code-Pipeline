@@ -5,84 +5,72 @@ weight : 2
 chapter : false
 pre : " <b> 3.2 </b> "
 ---
-1. At the CodeCommit console, click **Pipeline-CodePipeline** on the left menu
-- Click **Getting started**
-- Click **Create pipeline**
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-5.png?featherlight=false&width=90pc)
+#### Create the pipeline
 
-2. Enter pipeline name: `fcj-book-store-frontend-pipeline`
-- Select **New service role** to crate a new role
-- Click **Next**
+1. Open [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Click **Pipelines** on the left menu.
+    - Click **Create pipeline** button.
+      ![CreatePipeline](/images/temp/1/45.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-6.png?featherlight=false&width=90pc)
+2. At **Step 1: Choose creation option** page.
+    - Choose **Build custom pipeline** at **Creation options**.
+    - Then click **Next** button.
+      ![CreatePipeline](/images/temp/1/20.png?width=90pc)
 
-3. Select **AWS CodeCommit** is source provider
-- Select repository is **fcj-book-store-frontend**
-- Select **main** branch
-- Click **Next**
+3. At **Step 2: Choose pipeline settings** page.
+    - Enter ``fcjBookStoreFEPipeline`` at **Pipeline name**.
+    - Choose **New service role** at **Service role**.
+    - Enter ``AWSCodePipelineServiceRole-us-east-1-fcjBookStoreFEPipeline`` at **Role name**.
+      ![CreatePipeline](/images/temp/1/47.png?width=90pc)
+    - Scroll down and click the **Next** button.
+      ![CreatePipeline](/images/temp/1/48.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-7.png?featherlight=false&width=90pc)
+4. At **Step 3: Add source stage** page.
+    - Choose **Gitlab** at **Source provider**.
+    - Choose **fcjBookStoreGitlabConnection** at **Connection**.
+      ![CreatePipeline](/images/temp/1/49.png?width=90pc)
+    - Scroll down, enter ``fcj-ws/fcj-book-store-frontend`` at **Repository name**.
+    - Enter ``master`` at **Default branch**.
+    - Click the **Next** button.
+      ![CreatePipeline](/images/temp/1/50.png?width=90pc)
 
-4. Select **AWS CodeBuild** is build provider
-- Select along with region of SAM pipeline
-- Click **Create new project**
+5. At **Step 4: Add build stage** page.
+    - Choose **Other build providers** at **Build provider**.
+    - Choose the **AWS CodeBuild**.
+    - Enter ``fcjBookStoreBuildProject`` at **Project name**.
+    - Click the **Next** button.
+      ![CreatePipeline](/images/temp/1/51.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-8.png?featherlight=false&width=90pc)
+6. At **Step 5: Add test stage** page.
+    - Click the **Skip test stage** button.
+      ![CreatePipeline](/images/temp/1/33.png?width=90pc)
 
-5. Enter project name: `fcj-book-store-frontend`
-- Select **Ubuntu** for OS
+7. At **Step 6: Add deploy stage** page.
+    - Choose the **Amazon S3** at **Deploy provider**.
+    - Choose **BuildArtifact** at **Artifact name**.
+    - Enter ``fcj-book-shop-by-myself`` at **Bucket**.
+    - Check the **Extract file before deploy**.
+    - Leave as default and click the **Next** button.
+      ![CreatePipeline](/images/temp/1/52.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-9.png?featherlight=false&width=90pc)
+8. At **Step 7: Review** page.
+    - Scroll down and click the **Create pipeline** button.
+      ![CreatePipeline](/images/temp/1/53.png?width=90pc)
 
-6. Select **Standard** for **Rumtime(s)** section
-- Select **aws/codebuild/standard:5.0** for **Image** section
+#### Test the pipeline
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-10.png?featherlight=false&width=90pc)
+1. Open [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Click **Pipelines** on the left menu.
+    - Check if the status of **fcjBookStoreFEPipeline** is **Succeeded**.
+      ![CreatePipeline](/images/temp/1/54.png?width=90pc)
 
-7. Can you enter `buildspec.yaml` for the name of Buildspec or not
-- Click **Continue to CodePipeline**
+2. Open [Amazon S3 console](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1).
+    - Click **General purpose buckets** on the left menu.
+    - Choose **fcj-book-shop-by-myself** bucket.
+      ![Preparation](/images/temp/1/3.png?width=90pc)
+    - At **fcj-book-shop-by-myself** page, scroll down and copy the **Bucket website endpoint** url.
+      ![Preparation](/images/temp/1/4.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-11.png?featherlight=false&width=90pc)
-
-8. Select project you just created
-- Click **Next**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-12.png?featherlight=false&width=90pc)
-
-9. Select **Amazon S3** is deploy provider
-- Select **fcj-book-store** bucket
-- Check to **Extract file before deploy**
-- Click **Next**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-13.png?featherlight=false&width=90pc)
-
-10. Scroll down to bottom and click **Create pipeline**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-14.png?featherlight=false&width=90pc)
-
-11. Wait for a while for the pipeline to be processed until it succeeds
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-15.png?featherlight=false&width=90pc)
-
-12. Open [Amazon S3 console](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-1)
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-16.png?featherlight=false&width=90pc)
-
-13. Click to **fcj-book-store** bucket
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-17.png?featherlight=false&width=90pc)
-
-14. The files and folders after the build have been deployed on the S3 bucket
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-18.png?featherlight=false&width=90pc)
-
-15. Click **Properties** tab
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-19.png?featherlight=false&width=90pc)
-
-16. Scroll down to bottom and click website enpoint
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-20.png?featherlight=false&width=90pc)
-
-So we have deployed a new pipeline for the source code of the front-end. The next step we will test the web running.
+3. Enter the copied link in a new tab in your web browser.
+    ![Preparation](/images/temp/1/5.png?width=90pc)

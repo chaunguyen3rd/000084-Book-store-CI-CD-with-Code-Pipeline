@@ -31,6 +31,37 @@ Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.c
     - Open **src/config.js**, change the value of **APP_API_URL** to the value of **ApiUrl** that you recorded in the [Create SAM pipeline](2-2-create-pipeline) step, in this case is ``https://zr0i1ihy24.execute-api.us-east-1.amazonaws.com/staging
     ``.
       ![GitRepoCreation](/images/temp/1/42.png?width=90pc)
+    - Next, create a new filed called ``buildspec.yml`` at the root directory of **FCJ-Serverless-Workshop** project as the following code.
+
+      ```yml
+      version: 0.2
+
+      phases:
+        install:
+          runtime-versions:
+            nodejs: 20.9.0
+          commands:
+            - npm install -g yarn
+        pre_build:
+          commands:
+            - echo Removing lock files...
+            - rm -f package-lock.json
+            - rm -f yarn.lock
+        build:
+          commands:
+            - echo Build started on `date`
+            - yarn install
+            - yarn build
+
+      artifacts:
+        base-directory: build
+        files:
+          - "**/*"
+        discard-paths: no
+      ```
+
+      ![GitRepoCreation](/images/temp/1/46.png?width=90pc)
+
     - Run the code below in your terminal at the root directory of **FCJ-Serverless-Workshop** project.
 
       ```bash
