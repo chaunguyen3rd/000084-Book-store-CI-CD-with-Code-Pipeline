@@ -1,88 +1,76 @@
 ---
-title : "Tạo pipeline "
+title : "Tạo pipeline"
 date :  "`r Sys.Date()`" 
 weight : 2
 chapter : false
 pre : " <b> 3.2 </b> "
 ---
-1. Tại bảng điều khiển của CodeCommit, ấn **Pipeline-CodePipeline** ở menu phía bên trái
-- Ấn **Getting started**
-- Ấn **Create pipeline**
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-5.png?featherlight=false&width=90pc)
+#### Tạo pipeline
 
-2. Nhập tên cho pipeline: `fcj-book-store-frontend-pipeline`
-- Chọn **New service role** để tạo role mới
-- Ấn **Next**
+1. Mở [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Nhấp vào **Pipelines** trên menu bên trái.
+    - Nhấp vào nút **Create pipeline**.
+      ![CreatePipeline](/images/temp/1/45.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-6.png?featherlight=false&width=90pc)
+2. Tại trang **Step 1: Choose creation option**.
+    - Chọn **Build custom pipeline** tại **Creation options**.
+    - Sau đó nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/20.png?width=90pc)
 
-3. Chọn **AWS CodeCommit** là nhà cũng cấp source
-- Chọn repository là **fcj-book-store-frontend**
-- Chọn nhánh **main**
-- Ấn **Next**
+3. Tại trang **Step 2: Choose pipeline settings**.
+    - Nhập ``fcjBookStoreFEPipeline`` tại **Pipeline name**.
+    - Chọn **New service role** tại **Service role**.
+    - Nhập ``AWSCodePipelineServiceRole-us-east-1-fcjBookStoreFEPipeline`` tại **Role name**.
+      ![CreatePipeline](/images/temp/1/47.png?width=90pc)
+    - Cuộn xuống và nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/48.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-7.png?featherlight=false&width=90pc)
+4. Tại trang **Step 3: Add source stage**.
+    - Chọn **Gitlab** tại **Source provider**.
+    - Chọn **fcjBookStoreGitlabConnection** tại **Connection**.
+      ![CreatePipeline](/images/temp/1/49.png?width=90pc)
+    - Cuộn xuống, nhập ``fcj-ws/fcj-book-store-frontend`` tại **Repository name**.
+    - Nhập ``master`` tại **Default branch**.
+    - Nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/50.png?width=90pc)
 
-4. Chọn **AWS CodeBuild** là nhà cung cấp để xây dựng
-- Chọn region cùng với region của SAM pipeline
-- Ấn **Create new project**
+5. Tại trang **Step 4: Add build stage**.
+    - Chọn **Other build providers** tại **Build provider**.
+    - Chọn **AWS CodeBuild**.
+    - Nhập ``fcjBookStoreBuildProject`` tại **Project name**.
+    - Nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/51.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-8.png?featherlight=false&width=90pc)
+6. Tại trang **Step 5: Add test stage**.
+    - Nhấp vào nút **Skip test stage**.
+      ![CreatePipeline](/images/temp/1/33.png?width=90pc)
 
-5. Nhập tên cho project: `fcj-book-store-frontend`
-- Chọn **Ubuntu** cho OS
+7. Tại trang **Step 6: Add deploy stage**.
+    - Chọn **Amazon S3** tại **Deploy provider**.
+    - Chọn **BuildArtifact** tại **Artifact name**.
+    - Nhập ``fcj-book-shop-by-myself`` tại **Bucket**.
+    - Chọn **Extract file before deploy**.
+    - Để mặc định và nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/52.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-9.png?featherlight=false&width=90pc)
+8. Tại trang **Step 7: Review**.
+    - Cuộn xuống và nhấp vào nút **Create pipeline**.
+      ![CreatePipeline](/images/temp/1/53.png?width=90pc)
 
-6. Chọn **Standard** cho mục **Rumtime(s)**
-- Chọn **aws/codebuild/standard:5.0** cho mục **Image**
+#### Kiểm tra pipeline
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-10.png?featherlight=false&width=90pc)
+1. Mở [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Nhấp vào **Pipelines** trên menu bên trái.
+    - Kiểm tra xem trạng thái của **fcjBookStoreFEPipeline** có phải là **Succeeded** không.
+      ![CreatePipeline](/images/temp/1/54.png?width=90pc)
 
-7. Bạn có thể nhập `buildspec.yaml` vào mục tên của Buildspec hoặc không
-- Ấn **Continue to CodePipeline**
+2. Mở [Amazon S3 console](https://s3.console.aws.amazon.com/s3/buckets?region=us-east-1).
+    - Nhấp vào **General purpose buckets** trên menu bên trái.
+    - Chọn bucket **fcj-book-shop-by-myself**.
+      ![Preparation](/images/temp/1/3.png?width=90pc)
+    - Tại trang **fcj-book-shop-by-myself**, cuộn xuống và sao chép url **Bucket website endpoint**.
+      ![Preparation](/images/temp/1/4.png?width=90pc)
 
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-11.png?featherlight=false&width=90pc)
-
-8. Chọn project bạn vừa tạo
-- Ấn **Next**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-12.png?featherlight=false&width=90pc)
-
-9. Chọn **Amazon S3** là nhà cung cấp triển khai
-- Chọn bucket **fcj-book-store**
-- Tích vào **Extract file before deploy**
-- Ấn **Next**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-13.png?featherlight=false&width=90pc)
-
-10. Kéo xuống cuối trang và ấn **Create pipeline**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-14.png?featherlight=false&width=90pc)
-
-11. Chờ một lúc để pipeline được xử lý đến khi thành công
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-15.png?featherlight=false&width=90pc)
-
-12. Mở bảng điều khiển của [Amazon S3](https://s3.console.aws.amazon.com/s3/buckets?region=ap-southeast-1)
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-16.png?featherlight=false&width=90pc)
-
-13. Ấn vào bucket **fcj-book-store**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-17.png?featherlight=false&width=90pc)
-
-14. Các tập và thư mục sau khi build đã được triển khi trên S3 bucket
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-18.png?featherlight=false&width=90pc)
-
-15. Ấn sang tab **Propertíe**
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-19.png?featherlight=false&width=90pc)
-
-16. Kéo xuống cuối trang và ấn vào endpoint của trang web
-
-![FrontEndPipeline](/images/3-build-frontend-pipeline/3-build-frontend-pipeline-20.png?featherlight=false&width=90pc)
-
-Vậy là chúng ta đã triển khai xong một pipeline mới cho phần source code của front-end. Bước tiếp theo chúng ta sẽ kiểm tra web chạy.
+3. Nhập liên kết đã sao chép vào một tab mới trong trình duyệt web của bạn.
+    ![Preparation](/images/temp/1/5.png?width=90pc)

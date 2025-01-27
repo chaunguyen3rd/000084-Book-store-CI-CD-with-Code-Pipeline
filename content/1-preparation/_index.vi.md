@@ -5,24 +5,16 @@ weight : 1
 chapter : false
 pre : " <b> 1. </b> "
 ---
-Trước khi thực hiện nội dung chính của workshop này, chúng ta chuẩn bị sam project và tải source của front-end về máy của bạn.
-1. Tải source code của sam project dưới đây
+Trước khi chúng ta đi vào nội dung chính của workshop này, chúng ta cần phải đặt lại ứng dụng web.
 
-{{%attachments title="SAM source" pattern=".*\.(zip)$"/%}}
+1. Tải xuống mã nguồn dưới đây.
 
-2. Chạy câu lệnh dưới đây để build project
-```
-sam build
-```
+    {{%attachments title="Source code" pattern=".*\.(zip)$"/%}}
 
-3. Thực hiện câu lệnh dưới đây để tải code **fcj-serverless-frontend** về máy của bạn
-```
-git clone https://github.com/AWS-First-Cloud-Journey/FCJ-Serverless-Workshop
-```
+2. Tải mã nguồn **FCJ-Serverless-Workshop** về thiết bị của bạn.
+    - Mở một terminal trên máy tính của bạn trong thư mục nơi bạn muốn lưu mã nguồn.
+    - Sao chép lệnh dưới đây.
 
-4. Thực hiện câu lệnh dưới đây tại thư mục gốc của **fcj-serverless-frontend** để build project
-```
-yarn build
-```
-
-Chúng ta đã chuẩn bị xong source cần thiết cho các bước tiếp theo.
+      ```bash
+      git clone https://github.com/AWS-First-Cloud-Journey/FCJ-Serverless-Workshop.git
+      ```

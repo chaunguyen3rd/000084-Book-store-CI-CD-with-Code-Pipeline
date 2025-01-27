@@ -1,55 +1,97 @@
 ---
-title : "Kiểm tra hoạt động"
+title : "Kiểm tra hoạt động web"
 date :  "`r Sys.Date()`" 
 weight : 4
 chapter : false
 pre : " <b> 4. </b> "
 ---
-Bạn có thể tải tệp ảnh ở đây để thêm dữ liệu để kiểm tra hoạt động của các dịch vụ
 
-{{%attachments title="Image" pattern=".*\.(jpeg)$"/%}}
+#### Chuẩn bị
 
-1. Ấn nút **Register** ở góc trên bên phải màn hình
+1. Mở [Amazon Cognito console](https://us-east-1.console.aws.amazon.com/cognito/v2/home?region=us-east-1).
+    - Nhấp vào **User pools** trên menu bên trái.
+    - Chọn tên User pool **fcj-user-pool**.
+      ![TestWebOperation](/images/temp/1/57.png?width=90pc)
 
-![UpdateSource](/images/4-test-operation/4-test-operation-1.png?featherlight=false&width=90pc)
+2. Tại trang **Overview: fcj-user-pool**.
+    - Nhấp vào **App clients** trên menu bên trái.
+    - Chọn tên App client **fcj-user-pool-client**.
+      ![TestWebOperation](/images/temp/1/58.png?width=90pc)
 
-2. Nhập thông tin để đăng ký tài khoản: email, mật khẩu và xác thực lại mật khẩu
-- Ấn **Register**
+3. Tại trang **App client: fcj-user-pool-client**.
+    - Ghi lại giá trị của **Client ID** và **Client secret**.
+      ![TestWebOperation](/images/temp/1/59.png?width=90pc)
 
-![UpdateSource](/images/4-test-operation/4-test-operation-2.png?featherlight=false&width=90pc)
+4. Đi đến thư mục gốc của dự án **fcj-book-store-sam-ws7** mà bạn đã tải xuống trước đó.
+    - Mở tệp **template.yml** tại thư mục gốc và thay đổi giá trị của **cognitoClientID** và **cognitoClientSecret** bằng giá trị bạn đã ghi lại ở bước trước.
 
-3. Mở email mà bạn đăng ký, sau đó tìm đến tin nhắn từ *no-reply@vertificationemail.com* để lấy mã xác thực tài khoản
+      ```yml
+      cognitoClientID:
+        Type: String
+        Default: 5fvkqik6cd87mqrfa7m3qg46j0 # Your Client ID
 
-![UpdateSource](/images/4-test-operation/4-test-operation-3.png?featherlight=false&width=90pc)
+      cognitoClientSecret:
+        Type: String
+        Default: smz277rcfj11eal321ffbnh59kw # Your Client secret
+      ```
 
-4. Nhập mã xác thực vào màn hình xác thực
-- Ấn **Submit**
+      ![TestWebOperation](/images/temp/1/60.png?width=90pc)
 
-![AccessWeb](/images/4-test-operation/4-test-operation-4.png?featherlight=false&width=90pc)
+    - Mở terminal của bạn tại thư mục gốc của dự án **fcj-book-store-sam-ws7** và chạy mã sau.
 
-5. Nhập thông tin tài khoản của bạn: email và mật khẩu để đăng nhập
+      ```bash
+      git add .
+      git commit -m "Change the value of Client ID and Client secret"
+      git push
+      ```
 
-![AccessWeb](/images/4-test-operation/4-test-operation-5.png?featherlight=false&width=90pc)
+5. Mở [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Nhấp vào **Pipelines** trên menu bên trái.
+    - Kiểm tra xem trạng thái của **fcjBookStorePipeline** có phải là **Succeeded** không.
+      ![TestWebOperation](/images/temp/1/61.png?width=90pc)
 
-6. Như vậy web đã đăng nhập và đăng ký bình thường. Chúng ta sẽ kiểm tra chức năng thêm sách mới
-- Ấn tab **Create new book**
-- Nhập ID: `1`
-- Nhập tên sách: `Python Coding`
-- Nhập tác giả: `Doan Minh Phung`
-- Nhập thể loại: `IT`
-- Nhập giá: `5.6`
-- Nhập mô tả: `Guide to basic of Python in real projects`
-- Ấn **Choose File** và chọn tệp ảnh **PythonCoding.jpeg** mà bạn vừa tải về
-- Ấn **Create**
+#### Kiểm tra hoạt động web
 
-![CreateBook](/images/4-test-operation/4-test-operation-6.png?featherlight=false&width=90pc)
+Bạn có thể tải xuống các tệp hình ảnh tại đây để thêm dữ liệu kiểm tra hoạt động của các dịch vụ
 
-6. Ấn **OK**
+{{%attachments title="Images" pattern=".*\.(jpeg)$"/%}}
 
-![CreateBook](/images/4-test-operation/4-test-operation-7.png?featherlight=false&width=90pc)
+1. Tại tab trong trình duyệt web của bạn từ bước trước, nhấp vào nút **Register** ở góc trên bên phải của màn hình.
+    ![TestWebOperation](/images/temp/1/55.png?width=90pc)
 
-7. Một sách mới đã được thêm vào cơ sở dữ liệu
+2. Tại trang **FCJ Book Store - Register**.
+    - Nhập thông tin để đăng ký tài khoản: email, mật khẩu và xác nhận lại mật khẩu.
+    - Nhấp vào nút **Register**.
+      ![TestWebOperation](/images/temp/1/56.png?width=90pc)
 
-![CreateBook](/images/4-test-operation/4-test-operation-8.png?featherlight=false&width=90pc)
+3. Mở email bạn đã đăng ký, sau đó tìm tin nhắn từ `no-reply@verificationemail.com` để lấy mã xác minh.
+    ![TestWebOperation](/images/temp/1/62.png?width=90pc)
 
-Chúng ta đã hoàn thành workshop, đã biết tạo SAM pipeline và pipeline bằng bảng điều khiển. Bài tiếp theo chúng ta tìm hiểu về gỡ lỗi, giám sát AWS Lambda với AWS CloudWatch và AWS X-ray
+4. Quay lại trang **Verify Email**.
+    - Nhập mã xác minh tại **Verify code**.
+    - Nhấp vào nút **Submit**.
+      ![TestWebOperation](/images/temp/1/63.png?width=90pc)
+
+5. Tại trang **FCJ Book Store - Login**.
+    - Nhập thông tin tài khoản của bạn: Email và Mật khẩu để đăng nhập.
+    - Nhấp vào nút **Submit**.
+      ![TestWebOperation](/images/temp/1/64.png?width=90pc)
+
+6. Vậy là chúng ta đã đăng ký và đăng nhập thành công. Tiếp theo, chúng ta sẽ kiểm tra chức năng thêm sách mới.
+    - Nhấp vào tab **Create new book**.
+    - Nhập ID: `1`.
+    - Nhập tên sách: `Python Coding`.
+    - Nhập tác giả: `Doan Minh Phung`.
+    - Nhập thể loại: `IT`.
+    - Nhập giá: `5.6`.
+    - Nhập mô tả: `Hướng dẫn cơ bản về Python trong các dự án thực tế`.
+    - Nhấp vào **Choose File** và chọn **PythonCoding.jpeg** đã tải xuống.
+    - Nhấp vào nút **Create**.
+      ![TestWebOperation](/images/temp/1/65.png?width=90pc)
+    - Sau đó nhấp vào nút **OK**.
+      ![TestWebOperation](/images/temp/1/66.png?width=90pc)
+
+7. Quay lại trang chủ, chúng ta có thể thấy một cuốn sách mới đã được thêm vào cơ sở dữ liệu.
+    ![TestWebOperation](/images/temp/1/67.png?width=90pc)
+
+Chúng ta đã hoàn thành workshop, đã biết cách tạo pipeline SAM và pipeline sử dụng console. Workshop tiếp theo chúng ta sẽ học về gỡ lỗi, giám sát **AWS Lambda** với **AWS CloudWatch** và **AWS X-ray**.

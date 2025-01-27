@@ -1,265 +1,145 @@
 ---
-title : "Tạo SAM pipeline"
+title : "Tạo pipeline cho SAM"
 date :  "`r Sys.Date()`" 
 weight : 2
 chapter : false
 pre : " <b> 2.2. </b> "
 ---
-Tạo SAM Pipeline với nhà cung cấp là CodePipeline sẽ có 3 bước riêng biệt sau:
-1. Tạo cơ sở hạ tầng và IAM roles cần thiết
-2. Tạo mẫu CloudFormation pipeline
-3. Triển khai mẫu CloudFormation pipeline
-SAM Pipeline sẽ tự động hoá tất cả các bước trên. 
 
-#### Tạo cơ sở hạ tầng và IAM roles cần thiết
-1. Chạy câu lệnh sau:
-```
-sam pipeline init --bootstrap
-```
+#### Chuẩn bị
 
-2. Trả lời các câu hỏi với theo danh sách dưới đây:
+Trong bước này, chúng ta sẽ tạo các vai trò IAM cho **CodePipeline - Deploy stage** và **CodeBuild**.
+> **Cảnh báo**
+> Vai trò được cấu hình với bảo mật tối thiểu, chỉ phù hợp cho môi trường workshop.
 
-- Select a pipeline template to get started: AWS Quick Start Pipeline Templates (1)
-- Select CI/CD system: AWS CodePipeline (5)
-- Do you want to go through stage setup process now? [y/N]: y
-- [1] Stage definition. Stage configuration name: dev
-- [2] Account details. Select a credential source to associate with this stage: default (named profile) (2)
-- Enter the region in which you want these resources to be created: Your region of choice
-- Enter the pipeline IAM user ARN if you have previously … [] return/enter
-- Enter the pipeline execution role ARN if you have previously … []: return/enter
-- Enter the CloudFormation execution role ARN if you have previously … []: return/enter
-- Please enter the artifact bucket ARN for your Lambda function. If you do not … []: return/enter
-- Does your application contain any IMAGE type Lambda functions? [y/N]: N
-- Press enter to confirm the values above … : return/enter
-- Should we proceed with the creation? [y/N]: y
+1. Tạo vai trò **CodePipeline - Deploy stage**.
+    - Mở [AWS IAM console](https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1), sau đó nhấp vào **Roles** trên menu bên trái.
+    - Nhấp vào nút **Create role**.
+      ![CreatePipeline](/images/temp/1/12.png?width=90pc)
+    - Tại trang **Step 1: Select trusted entity**.
+      - Chọn **AWS service** tại **Trusted entity type**.
+      - Nhập ``CloudFormation`` tại **Service or use case** và chọn **CloudFormation** tại **Use case**.
+      - Sau đó nhấp vào nút **Next**.
+        ![CreatePipeline](/images/temp/1/13.png?width=90pc)
+    - Tại trang **Step 2: Add permissions**.
+      - Nhập ``AdministratorAccess`` tại **Search** box.
+      - Chọn chính sách **AdministratorAccess**.
+      - Sau đó nhấp vào nút **Next**.
+        ![CreatePipeline](/images/temp/1/14.png?width=90pc)
+    - Tại trang **Step 3: Name, review, and create**.
+      - Nhập ``fcjCodePipelineDeployStageRole`` tại **Role name**.
+        ![CreatePipeline](/images/temp/1/15.png?width=90pc)
+      - Cuộn xuống và nhấp vào nút **Create role**.
+        ![CreatePipeline](/images/temp/1/16.png?width=90pc)
 
-```
-sam pipeline init generates a pipeline configuration file that your CI/CD system
-can use to deploy serverless applications using AWS SAM.
-We will guide you through the process to bootstrap resources for each stage,
-then walk through the details necessary for creating the pipeline config file.
+2. Tạo vai trò **CodeBuild**.
+    - Mở [AWS IAM console](https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1), sau đó nhấp vào **Roles** trên menu bên trái.
+    - Nhấp vào nút **Create role**.
+      ![CreatePipeline](/images/temp/1/12.png?width=90pc)
+    - Tại trang **Step 1: Select trusted entity**.
+      - Chọn **AWS service** tại **Trusted entity type**.
+      - Nhập ``CodeBuild`` tại **Service or use case** và chọn **CodeBuild** tại **Use case**.
+      - Sau đó nhấp vào nút **Next**.
+        ![CreatePipeline](/images/temp/1/17.png?width=90pc)
+    - Tại trang **Step 2: Add permissions**.
+      - Nhập ``AdministratorAccess`` tại **Search** box.
+      - Chọn chính sách **AdministratorAccess**.
+      - Sau đó nhấp vào nút **Next**.
+        ![CreatePipeline](/images/temp/1/14.png?width=90pc)
+    - Tại trang **Step 3: Name, review, and create**.
+      - Nhập ``fcjCodePipelineDeployStageRole`` tại **Role name**.
+        ![CreatePipeline](/images/temp/1/18.png?width=90pc)
+      - Cuộn xuống và nhấp vào nút **Create role**.
+        ![CreatePipeline](/images/temp/1/19.png?width=90pc)
 
-Please ensure you are in the root folder of your SAM application before you begin.
+#### Tạo pipeline
 
-Select a pipeline template to get started:
-        1 - AWS Quick Start Pipeline Templates
-        2 - Custom Pipeline Template Location
-Choice: 1
+1. Mở [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Nhấp vào **Pipelines** trên menu bên trái.
+    - Nhấp vào nút **Create pipeline**.
+      ![CreatePipeline](/images/temp/1/11.png?width=90pc)
 
-Cloning from https://github.com/aws/aws-sam-cli-pipeline-init-templates.git (process may take a moment)
-Select CI/CD system
-        1 - Jenkins
-        2 - GitLab CI/CD
-        3 - GitHub Actions
-        4 - Bitbucket Pipelines
-        5 - AWS CodePipeline
-Choice: 5
-You are using the 2-stage pipeline template.
- _________    _________ 
-|         |  |         |
-| Stage 1 |->| Stage 2 |
-|_________|  |_________|
+2. Tại trang **Step 1: Choose creation option**.
+    - Chọn **Build custom pipeline** tại **Creation options**.
+    - Sau đó nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/20.png?width=90pc)
 
-Checking for existing stages...
+3. Tại trang **Step 2: Choose pipeline settings**.
+    - Nhập ``fcjBookStorePipeline`` tại **Pipeline name**.
+    - Chọn **New service role** tại **Service role**.
+    - Nhập ``AWSCodePipelineServiceRole-us-east-1-fcjBookStorePipeline`` tại **Role name**.
+      ![CreatePipeline](/images/temp/1/21.png?width=90pc)
+    - Cuộn xuống và nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/22.png?width=90pc)
 
-[!] None detected in this account.
+4. Tại trang **Step 3: Add source stage**.
+    - Chọn **Gitlab** tại **Source provider**.
+    - Nhấp vào nút **Connect to Gitlab**.
+      ![CreatePipeline](/images/temp/1/23.png?width=90pc)
+    - Tại trang **Create a connection** ở tab trình duyệt mới vừa mở.
+      - Nhập ``fcjBookStoreGitlabConnection`` tại **Connection name**.
+      - Nhấp vào nút **Connect to Gitlab**.
+        ![CreatePipeline](/images/temp/1/24.png?width=90pc)
+      - Sau khi đăng nhập thành công vào Gitlab, nhấp vào nút **Connect**.
+        ![CreatePipeline](/images/temp/1/25.png?width=90pc)
+    - Kiểm tra xem kết nối **Gitlab** có thành công không.
+    - Nhập ``fcj-ws/fcj-book-store-backend`` tại **Repository name**.
+    - Nhập ``master`` tại **Default branch**.
+      ![CreatePipeline](/images/temp/1/26.png?width=90pc)
+    - Cuộn xuống dưới cùng và nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/27.png?width=90pc)
 
-Do you want to go through stage setup process now? If you choose no, you can still reference other bootstrapped resources. [y/N]: y
+5. Tại trang **Step 4: Add build stage**.
+    - Chọn **Other build providers** tại **Build provider**.
+    - Chọn **AWS CodeBuild**.
+    - Nhấp vào nút **Create project**.
+      ![CreatePipeline](/images/temp/1/31.png?width=90pc)
+    - Tại trang **Create build project** ở tab trình duyệt mới vừa mở.
+      - Nhập ``fcjBookStoreBuildProject`` tại **Project name**.
+        ![CreatePipeline](/images/temp/1/28.png?width=90pc)
+      - Cuộn xuống, chọn **Ubuntu** tại **Operating system**.
+      - Chọn **Existing service role** tại **Service role**.
+      - Chọn **fcjCodeBuildRole** tại **Role ARN**.
+        ![CreatePipeline](/images/temp/1/29.png?width=90pc)
+      - Cuộn xuống dưới cùng, chọn **Use a buildspec file** tại **Build specifications**.
+      - Nhấp vào nút **Continue to CodePipeline**.
+        ![CreatePipeline](/images/temp/1/30.png?width=90pc)
+    - Chọn **fcjBookStoreBuildProject** tại **Project name**.
+    - Để mặc định và nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/32.png?width=90pc)
 
-For each stage, we will ask for [1] stage definition, [2] account details, and [3]
-reference application build resources in order to bootstrap these pipeline
-resources.
+6. Tại trang **Step 5: Add test stage**.
+    - Nhấp vào nút **Skip test stage**.
+      ![CreatePipeline](/images/temp/1/33.png?width=90pc)
 
-We recommend using an individual AWS account profiles for each stage in your
-pipeline. You can set these profiles up using aws configure or ~/.aws/credentials. See
-[https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html].
+7. Tại trang **Step 6: Add deploy stage**.
+    - Chọn **AWS CloudFormation** tại **Deploy provider**.
+    - Chọn **BuildArtifact** tại **Input artifacts**.
+    - Chọn **Create or update a stack** tại **Action mode**.
+    - Nhập ``fcj-book-store`` tại **Stack name**.
+      ![CreatePipeline](/images/temp/1/34.png?width=90pc)
+    - Cuộn xuống, chọn **BuildArtifact** tại **Artifact name**.
+    - Nhập ``packaged.yaml`` tại **File name**.
+    - Chọn **CAPABILITY_IAM**, **CAPABILITY_NAMED_IAM** và **CAPABILITY_AUTO_EXPAND** tại **Capabilities - optional**.
+    - Chọn **fcjCodePipelineDeployStageRole** tại **Role name**.
+    - Nhấp vào nút **Next**.
+      ![CreatePipeline](/images/temp/1/35.png?width=90pc)
 
+8. Tại trang **Step 7: Review**.
+    - Cuộn xuống và nhấp vào nút **Create pipeline**.
+      ![CreatePipeline](/images/temp/1/36.png?width=90pc)
 
-Stage 1 Setup
+#### Kiểm tra pipeline
 
-[1] Stage definition
-Enter a configuration name for this stage. This will be referenced later when you use the sam pipeline init command:
-Stage configuration name: dev
+1. Mở [AWS CodePipeline console](https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/start?region=us-east-1).
+    - Nhấp vào **Pipelines** trên menu bên trái.
+    - Chọn pipeline **fcjBookStorePipeline**.
+      ![CreatePipeline](/images/temp/1/37.png?width=90pc)
 
-[2] Account details
-The following AWS credential sources are available to use.
-To know more about configuration AWS credentials, visit the link below:
-https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html                
-        1 - Environment variables (not available)
-        2 - default (named profile)
-        3 - produser (named profile)
-        q - Quit and configure AWS credentials
-Select a credential source to associate with this stage: 2
-Associated account 885078239936 with configuration dev.
+2. Tại trang **fcjBookStorePipeline**.
+    - Cuộn xuống dưới cùng, nhấp vào nút **View details**.
+      ![CreatePipeline](/images/temp/1/38.png?width=90pc)
 
-Enter the region in which you want these resources to be created [ap-southeast-1]: ap-southeast-1
-Enter the pipeline IAM user ARN if you have previously created one, or we will create one for you []: 
-
-[3] Reference application build resources
-Enter the pipeline execution role ARN if you have previously created one, or we will create one for you []: 
-Enter the CloudFormation execution role ARN if you have previously created one, or we will create one for you []: 
-Please enter the artifact bucket ARN for your Lambda function. If you do not have a bucket, we will create one for you []: 
-Does your application contain any IMAGE type Lambda functions? [y/N]: n
-
-[4] Summary
-Below is the summary of the answers:
-        1 - Account: 885078239936
-        2 - Stage configuration name: dev
-        3 - Region: ap-southeast-1
-        4 - Pipeline user: [to be created]
-        5 - Pipeline execution role: [to be created]
-        6 - CloudFormation execution role: [to be created]
-        7 - Artifacts bucket: [to be created]
-        8 - ECR image repository: [skipped]
-Press enter to confirm the values above, or select an item to edit the value: 
-
-This will create the following required resources for the 'dev' configuration: 
-        - Pipeline IAM user
-        - Pipeline execution role
-        - CloudFormation execution role
-        - Artifact bucket
-Should we proceed with the creation? [y/N]: y
-        Creating the required resources...
-
-Checking for existing stages...
-```
-Sau khi hoàn tất, bạn sẽ thấy đầu ra giống như sau:
-```
-Successfully created!
-The following resources were created in your account:
-        - Pipeline IAM user
-        - Pipeline execution role
-        - CloudFormation execution role
-        - Artifact bucket
-Pipeline IAM user credential:
-        AWS_ACCESS_KEY_ID: AAAAAAAAAAAAIFRDVPDX
-        AWS_SECRET_ACCESS_KEY: xxxxxxxxxxxxxxxxxxxxxxkMYI9RatNgVcIybUwh
-```
-3. Mở bảng điểu khiển của [CloudFormation](https://ap-southeast-1.console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/)
-
-![CreatePipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-1.png?featherlight=false&width=90pc)
-
-4. Ấn **Stacks** ở menu phía bên trái để kiểm tra xem stack đã được tạo chưa.
-- Ấn vào stack đang hiển thị
-
-![CreatePipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-2.png?featherlight=false&width=90pc)
-
-5. Ấn sang tab **Resources**, các tài nguyên đã được khởi tạo
-
-![CreatePipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-3.png?featherlight=false&width=90pc)
-
-6. Quay lại với màn hình tạo SAM pipeline
-- Nhập "N" để không tạo stage thứ 2.
-
-![CreatePipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-4.png?featherlight=false&width=90pc)
-
-#### Tạo mẫu CloudFormation pipeline
-Chúng ta tiếp tục tạo mẫu CloudFormation xác định toàn bộ CI/CD pipeline
-
-1. Nhập các câu trả lời theo dánh sách dưới đây
-
-- What is the Git provider? Choice []: CodeCommit (2)
-- What is the CodeCommit repository name?: fcj-book-store-backend
-- What is the Git branch used for production deployments? [main]: main
-- What is the template file path? [template.yaml]: template.yaml
-- Select an index or enter the stage 1’s configuration name (as provided during the bootstrapping): 1
-- What is the sam application stack name for stage 1? [sam-app]: fcj-book-store-backend-dev
-- Select an index or enter the stage 2’s configuration name (as provided during the bootstrapping): 1
-- What is the sam application stack name for stage 2? [sam-app]: fcj-book-store-backend-dev
-
-```
-What is the Git provider?
-        1 - Bitbucket
-        2 - CodeCommit
-        3 - GitHub
-        4 - GitHubEnterpriseServer
-Choice []: 2
-What is the CodeCommit repository name?: fcj-book-store-backend
-What is the Git branch used for production deployments? [main]: main
-What is the template file path? [template.yaml]: template.yaml
-We use the stage configuration name to automatically retrieve the bootstrapped resources created when you ran `sam pipeline bootstrap`.
-
-Here are the stage configuration names detected in .aws-sam/pipeline/pipelineconfig.toml:
-        1 - dev
-        2 - prod
-Select an index or enter the stage 1's configuration name (as provided during the bootstrapping): 1
-What is the sam application stack name for stage 1? [sam-app]: fcj-book-store-backend-dev
-Stage 1 configured successfully, configuring stage 2.
-
-Here are the stage configuration names detected in .aws-sam/pipeline/pipelineconfig.toml:
-        1 - dev
-        2 - prod
-Select an index or enter the stage 2's configuration name (as provided during the bootstrapping): 1
-What is the sam application stack name for stage 2? [sam-app]: fcj-book-store-backend-dev
-Stage 2 configured successfully.
-To deploy this template and connect to the main git branch, run this against the leading account:
-`sam deploy -t codepipeline.yaml --stack-name <stack-name> --capabilities=CAPABILITY_IAM`.
-SUMMARY
-We will generate a pipeline config file based on the following information:
-        What is the Git provider?: CodeCommit
-        What is the CodeCommit repository name?: fcj-book-store-backend
-        …………………
-        What is the ECR repository URI for stage 2?: 
-        What is the AWS region for stage 2?: ap-southeast-1
-Successfully created the pipeline configuration file(s):
-        - codepipeline.yaml
-        - assume-role.sh
-        - pipeline/buildspec_unit_test.yml
-        - pipeline/buildspec_build_package.yml
-        - pipeline/buildspec_integration_test.yml
-        - pipeline/buildspec_feature.yml
-        - pipeline/buildspec_deploy.yml
-```
-
-2. Sau khi hoàn thành, SAM project có cấu trúc như sau
-```
-└── fcj-book-store-sam-ws7
-    ├── codepipeline.yaml       # (new) CodePipeline CloudFormation template
-    ├── assume-role.sh          # (new) Helper script for CodePipeline
-    ├── pipeline/               # (new) Build Specs for CodeBuild
-    ├── events
-    ├── fcj-book-store/         # SAM application root
-    ├── README.md
-    └── template.yaml           # SAM template
-```
-
-#### Triển khai mẫu CloudFormation pipeline
-1. Chạy các câu lệnh sau để tải những thư mục và tệp mới được tạo lên CodeCommit repository
-```
-git add .
-git commit -m "Adding SAM CI/CD Pipeline definition"
-git push
-```
-
-2. Sau đó, triển khai SAM Pipelines bằng câu lệnh sau:
-```
-sam deploy -t codepipeline.yaml --stack-name fcj-book-store-backend-pipeline --capabilities=CAPABILITY_IAM
-```
-
-3. Đợi một lúc, trở lại với bảng điều khiển của CloudFormation để kiểm tra
-- Tải lại danh sách stack
-- Ấn chọn **fcj-book-store-backend**
-
-![DeployPipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-5.png?featherlight=false&width=90pc)
-
-4. Mở bảng điều khiển của [CodePipeline](https://ap-southeast-1.console.aws.amazon.com/codesuite/codepipeline/start?region=ap-southeast-1)
-
-![DeployPipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-6.png?featherlight=false&width=90pc)
-
-5. Một pipeline đang được xử lý
- 
-![DeployPipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-7.png?featherlight=false&width=90pc)
-
-6. Đợi một lúc để xử lý pipeline hoàn thành
-
-![DeployPipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-8.png?featherlight=false&width=90pc)
-
-7. Trở lại bảng điều khiển của CloudFormation, tải lại danh sách các stacks
-- Ấn chọn **fcj-book-store-backend-dev**
-- Ấn tab **Outputs**
-- Ghi lại URL của API để dùng cho bước sau
-
-![DeployPipeline](/images/2-build-sam-pipeline/2-2-create-pipeline-9.png?featherlight=false&width=90pc)
-
-
-Vậy là chúng ta đã triển khai thành công SAM Pipeline. Bước tiếp theo chúng ta sẽ triển khi pipeline cho phần front-end của ứng dụng web.
+3. Tại trang **fcjBookStorePipeline - Deploy stage**.
+    - Chọn tab **Output** và ghi lại **ApiUrl**.
+      ![CreatePipeline](/images/temp/1/39.png?width=90pc)
