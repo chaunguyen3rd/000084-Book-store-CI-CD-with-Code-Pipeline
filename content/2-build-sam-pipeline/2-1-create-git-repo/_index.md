@@ -9,14 +9,14 @@ pre : " <b> 2.1. </b> "
 1. Open your **Gitlab** dashboard.
     - Click the **Projects** on the left menu.
     - Choose **Create a project** option.
-      ![GitRepoCreation](/images/temp/1/6.png?width=90pc)
+      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/6.png?width=90pc)
     - At **Create new project** page, choose **Create blank project** option.
-      ![GitRepoCreation](/images/temp/1/7.png?width=90pc)
+      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/7.png?width=90pc)
     - At **Create blank project** page.
       - Enter ``fcj-book-store-backend`` at **Project name**.
       - Uncheck **Initialize repository with a README**.
       - Click the **Create project** button.
-        ![GitRepoCreation](/images/temp/1/8.png?width=90pc)
+        ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/8.png?width=90pc)
 
 2. Configure SSH keys to communicate with **Gitlab**.
     - Follow the documents in **Notes** to finish this step.
@@ -38,7 +38,7 @@ Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.c
       git push --set-upstream origin master
       ```
 
-      ![GitRepoCreation](/images/temp/1/9.png?width=90pc)
+      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/9.png?width=90pc)
 
 4. Back to **fcj-book-store-backend** Gitlab project. You could see the code has been uploaded.
-    ![GitRepoCreation](/images/temp/1/10.png?width=90pc)
+    ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/10.png?width=90pc)

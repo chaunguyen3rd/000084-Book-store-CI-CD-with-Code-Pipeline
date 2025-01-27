@@ -9,14 +9,14 @@ pre : " <b> 2.1. </b> "
 1. Mở bảng điều khiển **Gitlab** của bạn.
     - Nhấp vào **Projects** trên menu bên trái.
     - Chọn tùy chọn **Create a project**.
-      ![GitRepoCreation](/images/temp/1/6.png?width=90pc)
+      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/6.png?width=90pc)
     - Tại trang **Create new project**, chọn tùy chọn **Create blank project**.
-      ![GitRepoCreation](/images/temp/1/7.png?width=90pc)
+      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/7.png?width=90pc)
     - Tại trang **Create blank project**.
       - Nhập ``fcj-book-store-backend`` tại **Project name**.
       - Bỏ chọn **Initialize repository with a README**.
       - Nhấp vào nút **Create project**.
-        ![GitRepoCreation](/images/temp/1/8.png?width=90pc)
+        ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/8.png?width=90pc)
 
 2. Cấu hình khóa SSH để giao tiếp với **Gitlab**.
     - Làm theo tài liệu trong **Notes** để hoàn thành bước này.
@@ -38,7 +38,7 @@ pre : " <b> 2.1. </b> "
       git push --set-upstream origin master
       ```
 
-      ![GitRepoCreation](/images/temp/1/9.png?width=90pc)
+      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/9.png?width=90pc)
 
 4. Quay lại dự án **fcj-book-store-backend** trên Gitlab. Bạn có thể thấy mã đã được tải lên.
-    ![GitRepoCreation](/images/temp/1/10.png?width=90pc)
+    ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/10.png?width=90pc)

@@ -14,7 +14,7 @@ Continuous Integration, Continuous Delivery, Continuous Deployment (CI/CD) are s
 In workshop 7 of this series, we will know about CI/CD flow building so that every time you change and push source code on the git repository, it will automatically re-update our services and applications. There are many tools for us to build CI/CD, the most popular are Jenkins, Gitlab CI, Circle CI. In this workshop, we will use AWS's CodePipeline.
 
 The CI/CD Architecture for back-end:
-![ServerlessExample](/images/SAMPipeline.png?featherlight=false&width=50pc)
+![ServerlessExample](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/SAMPipeline.png?featherlight=false&width=50pc)
 
 - The developer create a git repository on Gitlab and pushes code of SAM project on it
 - Every time the source code is updated, CodeBuild will automatically rebuild and prepare the CloudFormation template
@@ -22,7 +22,7 @@ The CI/CD Architecture for back-end:
 
 The CI/CD Architecture for website front-end:
 
-![ServerlessExample](/images/FrontEndPipeline.png?featherlight=false&width=50pc)
+![ServerlessExample](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/FrontEndPipeline.png?featherlight=false&width=50pc)
 
 - The developer creates a git repository on Gitlab and pushes the front-end code on it
 - Every time the source code is updated, CodeBuild will automatically rebuild and then package the build folder

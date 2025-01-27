@@ -14,7 +14,7 @@ Continuous Integration, Continuous Delivery, Continuous Deployment (CI/CD) là c
 Trong bài số 7 của series này, chúng ta sẽ tìm hiểu về cách xây dựng luồng CI/CD để mỗi khi bạn thay đổi source của ứng dụng và đưa lên git repository, nó sẽ được tự động cập nhật lại các dịch vụ và ứng dụng của chúng ta. Có rất nhiều tool để ta xây dựng CI/CD, phổ biến nhất là Jenkins, Gitlab CI, Circle CI. Trong bài này chúng ta sẽ sử dụng CodePipeline của AWS.
 
 Kiến trúc CI/CD cho back-end:
-![SeverlessExample](/images/SAMPipeline.png?featherlight=false&width=50pc)
+![SeverlessExample](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/SAMPipeline.png?featherlight=false&width=50pc)
 
 - Nhà phát triển tạo một git repo trên Gitlab và đưa code của SAM project lên đó
 - Mỗi khi source code được cập nhật, CodeBuild sẽ tự động build lại và chuẩn bị CloudFormation template
@@ -23,7 +23,7 @@ Kiến trúc CI/CD cho back-end:
 
 Kiến trúc CI/CD cho front-end của web:
 
-![SeverlessExample](/images/FrontEndPipeline.png?featherlight=false&width=50pc)
+![SeverlessExample](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/FrontEndPipeline.png?featherlight=false&width=50pc)
 
 - Nhà phát triển tạo một git repo trên Gitlab và đưa front-end code lên đó
 - Mỗi khi source code được cập nhật, CodeBuild sẽ tự động build lại sau đó đóng gói thư mục build
