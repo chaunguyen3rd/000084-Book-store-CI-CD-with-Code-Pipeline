@@ -1,6 +1,6 @@
 ---
 title : "Create Git repository "
-date :  "`r Sys.Date()`" 
+date :  2025-02-11
 weight : 1
 chapter : false
 pre : " <b> 3.1 </b> "
@@ -9,14 +9,14 @@ pre : " <b> 3.1 </b> "
 1. Open your **Gitlab** dashboard.
     - Click the **Projects** on the left menu.
     - Click the **New project** button.
-      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/40.png?width=90pc)
+      ![GitRepoCreation](/images/temp/1/40.png?width=90pc)
     - At **Create new project** page, choose **Create blank project** option.
-      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/7.png?width=90pc)
+      ![GitRepoCreation](/images/temp/1/7.png?width=90pc)
     - At **Create blank project** page.
       - Enter ``fcj-book-store-frontend`` at **Project name**.
       - Uncheck **Initialize repository with a README**.
       - Click the **Create project** button.
-        ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/41.png?width=90pc)
+        ![GitRepoCreation](/images/temp/1/41.png?width=90pc)
 
 2. Configure SSH keys to communicate with **Gitlab**.
     - Follow the documents in **Notes** to finish this step.
@@ -30,7 +30,7 @@ Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.c
     - Go to the root directory of **FCJ-Serverless-Workshop** project that you downloaded before.
     - Open **src/config.js**, change the value of **APP_API_URL** to the value of **ApiUrl** that you recorded in the [Create SAM pipeline](2-2-create-pipeline) step, in this case is ``https://zr0i1ihy24.execute-api.us-east-1.amazonaws.com/staging
     ``.
-      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/42.png?width=90pc)
+      ![GitRepoCreation](/images/temp/1/42.png?width=90pc)
     - Next, create a new filed called ``buildspec.yml`` at the root directory of **FCJ-Serverless-Workshop** project as the following code.
 
       ```yml
@@ -60,7 +60,7 @@ Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.c
         discard-paths: no
       ```
 
-      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/46.png?width=90pc)
+      ![GitRepoCreation](/images/temp/1/46.png?width=90pc)
 
     - Run the code below in your terminal at the root directory of **FCJ-Serverless-Workshop** project.
 
@@ -73,7 +73,7 @@ Read more about [Use SSH keys to communicate with GitLab](https://.docs.gitlab.c
       git push --set-upstream origin master
       ```
 
-      ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/43.png?width=90pc)
+      ![GitRepoCreation](/images/temp/1/43.png?width=90pc)
 
 4. Back to **fcj-book-store-frontend** Gitlab project. You could see the code has been uploaded.
-    ![GitRepoCreation](https://chaunguyen3rd.github.io/000084-Book-store-CI-CD-with-Code-Pipeline/images/temp/1/44.png?width=90pc)
+    ![GitRepoCreation](/images/temp/1/44.png?width=90pc)
